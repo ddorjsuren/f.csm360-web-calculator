@@ -1,21 +1,65 @@
-.number{
-    background-color: aquamarine;
-}
-body{
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    background-color: #1a1a1a;
+}
+
+.calculator {
+    background-color: rgba(171, 91, 0, 0.85);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 340px;
+    opacity: 0.95;
+}
+
+.display {
+    width: 100%;
+    height: 70px;
+    background-color: rgba(255, 220, 181, 0.85);
+    border: none;
+    border-radius: 8px;
+    font-size: 24px;
+    text-align: right;
+    padding: 0 12px;
+    box-sizing: border-box;
+    color: #333;
 }
 
 .buttons {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 20px;
-    width: 100%;
+    grid-template-columns: repeat(4, 1fr) 1fr;
+    gap: 10px;
 }
-.buttonbig{
+
+button {
+    height: 60px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(161, 255, 102, 0.9);
+    font-size: 19px;
+    cursor: pointer;
+    transition: opacity 0.1s;
+}
+
+button:active,
+button.pressed {
+    opacity: 0.5;
+}
+
+#btnClear {
     grid-column: span 2;
-    width: max-content;
+}
+
+.equals {
+    grid-column: span 2;
+}
+
+.scientific {
+    font-size: 17px;
 }
