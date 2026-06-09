@@ -1,9 +1,5 @@
 const display = document.querySelector(".display");
 
-let number1 = 0;
-let operator = "";
-let isStartNumber = true;
-
 function getDisplay() {
     return display.value;
 }
@@ -26,115 +22,100 @@ function formatResult(val) {
 function isError() {
     return getDisplay() === "Алдаа";
 }
+function appendToDisplay(val) {
+    /*
+    If the display shows 0 or an error replace it entirely
+    otherwise append to the existing expression
+    */
+    if (getDisplay() === "0" || isError()) {
+        setDisplay(val);
+    } else {
+        setDisplay(getDisplay() + val);
+    }
+}
+
 
 document.querySelectorAll(".number").forEach(btn => {
     btn.addEventListener("click", () => {
-        const num = btn.textContent;
-
-        if (isStartNumber) {
-            setDisplay(num);
-            isStartNumber = false;
-        } else {
-            if (num === "." && getDisplay().includes(".")) return;
-            setDisplay(getDisplay() + num);
-        }
+        appendToDisplay(btn.textContent);
     });
 });
 
 document.querySelectorAll(".operator:not(.equals)").forEach(btn => {
     btn.addEventListener("click", () => {
-        const current = getDisplay();
-        if (!current || isError()) return;
-
-        number1 = parseFloat(current);
-        operator = btn.dataset.op;
-        isStartNumber = true;
+        appendToDisplay(btn.dataset.op);
     });
 });
 
 document.querySelector(".equals").addEventListener("click", () => {
-    const current = getDisplay();
-    if (!operator || !current || isError()) return;
-
-    const number2 = parseFloat(current);
-    let result;
-
-    switch (operator) {
-        case "+": result = number1 + number2; break;
-        case "-": result = number1 - number2; break;
-        case "*": result = number1 * number2; break;
-        case "/":
-            if (number2 === 0) {
-                setDisplay("Error");
-                operator = "";
-                isStartNumber = true;
-                return;
-            }
-            result = number1 / number2;
-            break;
+    try {
+        const result = eval(getDisplay());
+        setDisplay(String(result));
+    } catch {
+        setDisplay("Error");
     }
-
-    setDisplay(formatResult(result));
-    operator = "";
-    isStartNumber = true;
 });
 
 document.querySelector("#btnClear").addEventListener("click", () => {
     setDisplay("0");
-    number1 = 0;
-    operator = "";
-    isStartNumber = true;
 });
 
 document.querySelector("#btnPlusMinus").addEventListener("click", () => {
-    const current = getDisplay();
-    if (!current || current === "0" || isError()) return;
-
-    const val = parseFloat(current) * -1;
-    setDisplay(formatResult(val));
+    if (isError()) return;
+    setDisplay("-("+getDisplay()+")");
 });
+
 
 document.querySelector("#btnSqrt").addEventListener("click", () => {
-    const current = getDisplay();
-    if (!current || current === "0" || isError()) return;
-
-    const val = parseFloat(current);
-    if (val < 0) {
+    if (isError()) return;
+    try {
+        const val = eval(getDisplay());
+        if (val < 0) {
+            setDisplay("Error");
+            return;
+        }
+        setDisplay(String(Math.sqrt(val)));
+    } catch {
         setDisplay("Error");
-        operator = "";
-        isStartNumber = true;
-        return;
     }
-    setDisplay(String(Math.sqrt(val)));
 });
 
-document.querySelector("#btnSquare").addEventListener("click", () => {
-    const current = getDisplay();
-    if (!current || current === "0" || isError()) return;
 
-    const val = parseFloat(current);
-    setDisplay(String(Math.pow(val, 2)));
+document.querySelector("#btnSquare").addEventListener("click", () => {
+    if (isError()) return;
+    try {
+        const val = eval(getDisplay());
+        setDisplay(String(Math.pow(val, 2)));
+    } catch {
+        setDisplay("Error");
+    }
 });
 
 document.querySelector("#btnSin").addEventListener("click", () => {
-    const current = getDisplay();
-    if (!current || current === "0" || isError()) return;
-
-    setDisplay(String(Math.sin(parseFloat(current))));
+    if (isError()) return;
+    try {
+        setDisplay(String(Math.sin(eval(getDisplay()))));
+    } catch {
+        setDisplay("Error");
+    }
 });
 
 document.querySelector("#btnCos").addEventListener("click", () => {
-    const current = getDisplay();
-    if (!current || current === "0" || isError()) return;
-
-    setDisplay(String(Math.cos(parseFloat(current))));
+    if (isError()) return;
+    try {
+        setDisplay(String(Math.cos(eval(getDisplay()))));
+    } catch {
+        setDisplay("Error");
+    }
 });
 
 document.querySelector("#btnTan").addEventListener("click", () => {
-    const current = getDisplay();
-    if (!current || current === "0" || isError()) return;
-
-    setDisplay(String(Math.tan(parseFloat(current))));
+    if (isError()) return;
+    try {
+        setDisplay(String(Math.tan(eval(getDisplay()))));
+    } catch {
+        setDisplay("Error");
+    }
 });
 
 /*
