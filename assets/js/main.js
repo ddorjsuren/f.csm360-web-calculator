@@ -24,7 +24,7 @@ function formatResult(val) {
 }
 
 function isError() {
-    return getDisplay() === "Error";
+    return getDisplay() === "Алдаа";
 }
 
 document.querySelectorAll(".number").forEach(btn => {
